@@ -34,10 +34,10 @@ public class SeckillExecution {
                 '}';
     }
 
-    public SeckillExecution(long seckillId, int state, String stateInfo) {
+    public SeckillExecution(long seckillId, SeckillStatEnum seckillStatEnum) {
         this.seckillId = seckillId;
-        this.state = state;
-        this.stateInfo = stateInfo;
+        this.state = seckillStatEnum.getState();
+        this.stateInfo = seckillStatEnum.getInfo();
     }
 
     public long getSeckillId() {
