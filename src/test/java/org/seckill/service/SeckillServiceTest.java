@@ -38,7 +38,6 @@ public class SeckillServiceTest {
         List<Seckill> seckillList = seckillService.getSeckillList();
 
         logger.info("list={}",seckillList);
-
     }
 
     @Test
