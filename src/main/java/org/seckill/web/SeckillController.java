@@ -27,47 +27,44 @@ public class SeckillController {
     @Autowired
     private SeckillService seckillService;
 
-    @RequestMapping(value="/list",method = RequestMethod.GET)
-    public String list(Model model){
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String list(Model model) {
         //获取列表页
         List<Seckill> list = seckillService.getSeckillList();
-        model.addAttribute("list",list);
+        model.addAttribute("list", list);
         return "list";
     }
 
-    @RequestMapping(value="/{seckillId}/detail" ,method = RequestMethod.GET)
-    public String detail(@PathVariable("seckillId") Long seckillId, Model model){
-        if(seckillId==null){
+    @RequestMapping(value = "/{seckillId}/detail", method = RequestMethod.GET)
+    public String detail(@PathVariable("seckillId") Long seckillId, Model model) {
+        if (seckillId == null) {
             return "redirect:/seckill/list";
         }
         Seckill seckill = seckillService.getById(seckillId);
-        if(seckill==null){
+        if (seckill == null) {
             return "forward:/seckill/list";
         }
-        model.addAttribute("seckill",seckill);
+        model.addAttribute("seckill", seckill);
         return "detail";
     }
 
 
-    @RequestMapping(value="/{seckillId}/exposer" ,
-                     method = RequestMethod.POST,
-                     produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/{seckillId}/exposer",
+            method = RequestMethod.POST,
+            produces = "application/json;charset=UTF-8")
     @ResponseBody
     public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId,
-                                          Model model){
-        SeckillResult<Exposer>  result = null ;
+                                          Model model) {
+        SeckillResult<Exposer> result = null;
         try {
             Exposer exposer = seckillService.exportSeckillUrl(seckillId);
-            result = new SeckillResult<Exposer>(true,exposer);
+            result = new SeckillResult<Exposer>(true, exposer);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            result = new SeckillResult<Exposer>(false,e.getMessage());
-
+            result = new SeckillResult<Exposer>(false, e.getMessage());
         }
-        return result ;
-
+        return result;
     }
-
 
 
 }
