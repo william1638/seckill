@@ -38,7 +38,7 @@
                                 <td><fmt:formatDate value="${sk.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
                                 <td><fmt:formatDate value="${sk.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/> </td>
                                 <td>
-                                    <a class="btn btn-info" href="/seckill/${sk.seckillId}/detail" target="_blank">详情</a>
+                                    <a class="btn btn-info" href="${pageContext.request.contextPath}/seckill/${sk.seckillId}/detail" target="_blank">详情</a>
                                 </td>
                             </tr>
                             </c:forEach>

@@ -59,6 +59,7 @@ public class SeckillController {
     public SeckillResult<Exposer> exposer(@PathVariable("seckillId") Long seckillId,
                                           Model model) {
         SeckillResult<Exposer> result = null;
+        System.out.println("sfs");
         try {
             Exposer exposer = seckillService.exportSeckillUrl(seckillId);
             result = new SeckillResult<Exposer>(true, exposer);
@@ -83,17 +84,19 @@ public class SeckillController {
             return new SeckillResult<SeckillExecution>(true, seckillExecution);
         } catch (RepeatKillException e) {
             seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.REPEAT_KILL);
-            return new SeckillResult<SeckillExecution>(false, e.getMessage());
+            return new SeckillResult<SeckillExecution>(true, e.getMessage());
         } catch (SeckillCloseException e) {
             seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.END);
-            return new SeckillResult<SeckillExecution>(false, e.getMessage());
+            return new SeckillResult<SeckillExecution>(true, e.getMessage());
         } catch (SeckillException e) {
             seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.INNER_ERROR);
-            return new SeckillResult<SeckillExecution>(false, e.getMessage());
+            return new SeckillResult<SeckillExecution>(true, e.getMessage());
         }
     }
 
-    @RequestMapping(value="/time/now ",method = RequestMethod.GET)
+    @RequestMapping(value="/time/now ",method = RequestMethod.GET,
+                    produces = "application/json;charset=UTF-8")
+    @ResponseBody
     public SeckillResult<Long> time(){
         Date now  = new Date();
         SeckillResult<Long> result = new SeckillResult<Long>(true,now.getTime());
