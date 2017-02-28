@@ -14,18 +14,21 @@ var seckill={
         }
     },
     validatePhone : function(killPhone){
-        if(killPhone!=null && killPhone.length==2 && !isNaN(killPhone)){
+        if(killPhone!=null && killPhone.length==11 && !isNaN(killPhone)){
             return true ;
         }else{
             return false;
         }
     },
-    countdown : function(seckillId,nowTime,startTime,endTime){
+    countDown : function(seckillId,nowTime,startTime,endTime){
         var seckillBox = $('#seckill-box');
+
         //时间判断
         if(nowTime > endTime){
             //秒杀结束
-            seckillBox.html('秒杀结束');
+
+           seckillBox.html("秒杀已经结束");
+
         }else if(nowTime < startTime){
         //    秒杀未开始,计时事件绑定
             var killTime = new Date(startTime+1000);
@@ -39,15 +42,18 @@ var seckill={
             });
         }else{
         //    秒杀开始
+            console.log("fssfsf");
             seckill.handleSeckillkill(seckillId,seckillBox);
         }
 
     },
     handleSeckillkill : function(seckillId,node){
+
         node.hide().html('<button class="btn btn-primary btn-lg" id="killBtn">开始秒杀</button>');
 
         $.post(seckill.URL.exposer(seckillId),{},function(result){
             if(result && result['success']){
+
                 var exposer = result['data'];
                 if(exposer['exposed']){
                     //开启秒杀
@@ -56,11 +62,13 @@ var seckill={
                     var killUrl = seckill.URL.execution(seckillId,md5);
                     $('#killBtn').on('click',function(){
                         $(this).addClass('disabled');
-                        $post(killUrl,{},function(result){
-                            if(resutl && result['success']){
+                        $.post(killUrl,{},function(result){
+                            console.log(result);
+                            if(result && result['success']){
+
                                 var killResult = result['data'];
-                                var state = result['state'];
-                                var stateInfo = result['stateInfo'];
+                                var state = killResult['state'];
+                                var stateInfo = killResult['stateInfo'];
                                 //    显示秒杀结果
                                 node.html('<span class="label label-success">'+stateInfo+' </span>');
                             }
@@ -68,10 +76,15 @@ var seckill={
                     });
                     node.show();
                 }else{
-
+                    console.log(result);
+                    //未开启秒杀(浏览器计时偏差)
+                    var now = exposer['now'];
+                    var start = exposer['start'];
+                    var end = exposer['end'];
+                    seckill.countDown(seckillId, now, start, end);
                 }
             }else{
-
+                console.log('result: ' + result);
             }
         });
 
@@ -89,6 +102,8 @@ var seckill={
             var startTime = params["startTime"];
             var endTime = params["endTime"];
             var seckillId = params["seckillId"];
+
+
             //    验证手机
             if (!seckill.validatePhone(killPhone)){
                 //绑定phone
@@ -119,11 +134,13 @@ var seckill={
             //已经登录
             //计时交互
             $.get(seckill.URL.now(),{},function(result){
+
                 if(result && result.success==true){
                     var nowTime = result['data'];
-                    console.log(nowTime);
-                   seckill.countdown(seckillId,nowTime,startTime,endTime);
-
+                   seckill.countDown(seckillId,nowTime,startTime,endTime);
+                }else{
+                    conlose.log("result="+result);
+                    alert('result:'+result)
                 }
             });
         }

@@ -66,7 +66,7 @@
         seckill.detail.init({
             seckillId : ${seckill.seckillId},
             startTime : ${seckill.startTime.time},
-            endTiem   : ${seckill.endTime.time}
+            endTime   : ${seckill.endTime.time}
 
         })
     })
