@@ -1,4 +1,4 @@
-package org.seckill.web;
+  package org.seckill.web;
 
 import org.seckill.dto.Exposer;
 import org.seckill.dto.SeckillExecution;
@@ -80,7 +80,8 @@ public class SeckillController {
         }
         SeckillExecution seckillExecution = null;
         try {
-            seckillExecution = seckillService.executeSeckill(seckillId, phone, md5);
+//            存储过程调用
+            seckillExecution = seckillService.executeSeckillProcedure(seckillId, phone, md5);
             return new SeckillResult<SeckillExecution>(true, seckillExecution);
         } catch (SeckillCloseException e) {
             seckillExecution = new SeckillExecution(seckillId, SeckillStatEnum.END);

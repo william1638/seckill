@@ -20,16 +20,25 @@
         WHERE
             seckill_id = #{seckillId}
 
-
     </select>
-
-
 
     <select id="queryAll" resultType="Seckill" parameterType="int" >
         SELECT seckill_id,name,number,start_time,end_time,create_time from seckill
         order by create_time DESC
         LIMIT #{offset},#{limit}
     </select>
+        
+    <!--mybatis调用存储过程-->
+    <select id="killByProcedure" parameterType="map" statementType="CALLABLE">
+        call execute_seckill (
+                #{seckillId,jdbcType=BIGINT,mode=IN},
+                #{phone,jdbcType=BIGINT,mode=IN},
+                #{killTime,jdbcType=TIMESTAMP,mode=IN},
+                #{result,jdbcType=INTEGER,mode=OUT}
+        )
+
+    </select>
+    
 
 
 </mapper>
